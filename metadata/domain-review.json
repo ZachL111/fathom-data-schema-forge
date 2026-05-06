@@ -1,0 +1,73 @@
+{
+  "repo": "fathom-data-schema-forge",
+  "language": "C++",
+  "category": "Data engineering",
+  "goal": "Build a C++ toolkit that studies schema behavior through framed sample traffic, with bounds and ordering tests and fixture-scale datasets.",
+  "review_model": {
+    "terms": [
+      "schema drift",
+      "lineage depth",
+      "partition skew",
+      "quality gap"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "schema drift",
+      "signal": 77,
+      "slack": 29,
+      "drag": 28,
+      "confidence": 48,
+      "score": 147,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "lineage depth",
+      "signal": 83,
+      "slack": 31,
+      "drag": 14,
+      "confidence": 45,
+      "score": 200,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "partition skew",
+      "signal": 56,
+      "slack": 33,
+      "drag": 20,
+      "confidence": 82,
+      "score": 167,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "quality gap",
+      "signal": 60,
+      "slack": 31,
+      "drag": 24,
+      "confidence": 79,
+      "score": 158,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "schema drift",
+      "signal": 63,
+      "slack": 40,
+      "drag": 13,
+      "confidence": 78,
+      "score": 205,
+      "lane": "ship"
+    }
+  ]
+}
