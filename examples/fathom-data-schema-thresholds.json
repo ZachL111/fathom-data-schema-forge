@@ -1,0 +1,17 @@
+{
+  "repo": "fathom-data-schema-forge",
+  "thresholds": {
+    "signal": 4,
+    "slack": 1,
+    "confidence": 2,
+    "drag": 5,
+    "ship": 175,
+    "watch": 103
+  },
+  "terms": [
+    "schema drift",
+    "lineage depth",
+    "partition skew",
+    "quality gap"
+  ]
+}
