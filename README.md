@@ -1,43 +1,68 @@
 # fathom-data-schema-forge
 
-fathom-data-schema-forge is a C++ project for data engineering. It focuses on this technical goal: Build a C++ toolkit that studies schema behavior through framed sample traffic, with bounds and ordering tests and fixture-scale datasets.
+`fathom-data-schema-forge` treats data engineering as a local verification problem. The C++ implementation is intentionally narrow, but the fixtures and notes make the behavior explicit.
 
-## Why it exists
+## Fathom Data Schema Forge Checkpoints
 
-Small engineering tools are easiest to trust when their rules are explicit, testable, and cheap to run locally. This repository packages a focused model with fixture data and a local verification path so behavior can be reviewed without external services.
+Treat the compact fixture as the contract and the extended examples as a scratchpad. The code should stay boring enough that a change in behavior is obvious from the test output.
 
-## Features
+## What This Is For
 
-- Deterministic policy scoring over fixture scenarios.
-- Clear accept or review decisions based on a documented threshold.
-- A command-line or local test path for quick validation.
-- Golden fixture data for repeatable checks.
-- Minimal dependencies and a compact project layout.
+The repository exists to keep a technical idea small enough to reason about. The implementation avoids external dependencies where possible, then uses fixtures to make changes easy to review.
+
+## Project Layout
+
+- `src`: primary implementation
+- `tests`: verification harness
+- `fixtures`: compact golden scenarios
+- `examples`: expanded scenario set
+- `metadata`: project constants and verification metadata
+- `docs`: operations and extension notes
+- `scripts`: local verification and audit commands
+
+## Useful Pieces
+
+- Includes extended examples for pipeline state, including `surge` and `degraded`.
+- Documents quality gates tradeoffs in `docs/operations.md`.
+- Runs locally with a single verification command and no external credentials.
+- Stores project constants and verification metadata in `metadata/project.json`.
+- Adds a repository audit script that checks structure before running the language verifier.
 
 ## Architecture Notes
 
-The core module exposes a small scoring API. Inputs are simple numeric signals: demand, capacity, latency, risk, and weight. The score uses a threshold of 154, risk penalty 7, latency penalty 3, and weight bonus 4. Tests exercise the public API against the fixture cases in `fixtures/cases.csv`.
+The core is a scoring model over demand, capacity, latency, risk, and weight. That keeps schema drift, lineage checks, and pipeline state in one explicit decision path. The threshold is 154, with risk penalty 7, latency penalty 3, and weight bonus 4. The C++ project uses a small library boundary and a compiled assertion harness.
 
-## Setup
+## Tooling
 
-Install the C++ toolchain and run commands from the repository root.
+Install C++ and run the commands from the repository root. The project does not need credentials or a hosted service.
 
-## Usage
+## Case Study
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
-```
+The extended cases are not random smoke tests. `degraded` keeps pressure on the review path, while `surge` shows the model when capacity and weight are strong enough to clear the threshold.
 
-The verification script builds or runs the project and checks the fixture decisions.
-
-## Tests
+## Local Workflow
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-## Limitations And Roadmap
+This runs the language-level build or test path against the compact fixture set.
 
-- The fixture set is intentionally small so it can be audited by hand.
-- Future work could add richer domain-specific input adapters.
-- The model is a local demonstration and does not claim production use.
+## Quality Gate
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
+```
+
+The audit command checks repository structure and README constraints before it delegates to the verifier.
+
+## Expansion Ideas
+
+- Add malformed input fixtures so the failure path is as visible as the happy path.
+- Split the scoring constants into a typed configuration object and validate it before use.
+- Add a comparison mode that shows how decisions change when one signal is adjusted.
+- Add one more data engineering fixture that focuses on a malformed or borderline input.
+
+## Scope
+
+The scoring model is simple by design. More domain-specific behavior should be added through explicit adapters or extra fixture classes rather than hidden constants.
